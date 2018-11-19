@@ -47,7 +47,7 @@ Build the interactive map in layers
 leaflet() %>% 
   addProviderTiles("Esri.WorldStreetMap", group = "Street Map") %>% 
   addProviderTiles("Esri.WorldImagery",group = "World Imagery") %>% 
-  addCircleMarkers(data = sy_r2, label = sy_r2$barrier_id, popup = ~paste0(sy_r2$barrier_id, "<br/>", sy_r2$pad_id), color = "red", group = "Detailed Required", radius = 6, fillOpacity = .5) %>% 
+  addCircleMarkers(data = sy_r2, label = sy_r2$barrier_id, popup = ~paste0(sy_r2$barrier_id, "<br/>", sy_r2$pad_id), color = "red", group = "Detailed Required", radius = 5, fillOpacity = .5) %>% 
   addCircleMarkers(data = sy_nr, label = sy_nr$barrier_id, popup = ~paste0(sy_nr$barrier_id, "<br/>", sy_nr$pad_id), color = "dodgerblue", group = "Non-Road Barrier", radius = 3, fillOpacity = 1) %>%
   addCircleMarkers(data = sy_r, label = sy_r$barrier_id, popup = ~paste0(sy_r$barrier_id, "<br/>", sy_r$pad_id), color = "green", group = "Road Barrier", radius = 3, fillOpacity = 1) %>%
   addLayersControl(baseGroups = c("Street Map", "World Imagery"), overlayGroups = c("Non-Road Barrier", "Road Barrier", "Detailed Required"))

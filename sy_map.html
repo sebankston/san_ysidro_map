@@ -140,10 +140,10 @@ library(sf)
 library(leaflet)
 library(leaflet.extras)
 library(googlesheets)
-library(janitor)</code></pre>
+library(janitor)
+library(htmlwidgets)</code></pre>
 <p>Get a list of the Google sheets you have access to.</p>
 <pre class="r"><code>gs_ls()</code></pre>
-<pre><code>## Auto-refreshing stale OAuth token.</code></pre>
 <pre><code>## Warning in strptime(x, fmt, tz = &quot;GMT&quot;): unknown timezone 'zone/tz/2018f.
 ## 1.0/zoneinfo/America/Los_Angeles'</code></pre>
 <pre><code>## Warning: package 'bindrcpp' was built under R version 3.4.4</code></pre>
@@ -189,16 +189,22 @@ library(janitor)</code></pre>
 ##   Notes = col_character()
 ## )</code></pre>
 <p>Filter for each barrier type to be added to the map as individual layers</p>
-<pre class="r"><code>sy_nr &lt;- sy_data %&gt;% filter(barrier_type_road_non_road == &quot;NR&quot;)
-sy_r &lt;- sy_data %&gt;% filter(barrier_type_road_non_road == &quot;R&quot;)
-sy_r2 &lt;- sy_data %&gt;% filter(barrier_type_road_non_road == &quot;R&quot; &amp; x2nd_pass_y_n == &quot;Yes&quot;)</code></pre>
+<pre class="r"><code>sy_nr &lt;- sy_data %&gt;% filter(barrier_type_road_non_road == &quot;NR&quot;) 
+sy_r &lt;- sy_data %&gt;% filter(barrier_type_road_non_road == &quot;R&quot;) 
+sy_r2 &lt;- sy_data %&gt;% filter(barrier_type_road_non_road == &quot;R&quot; &amp; x2nd_pass_y_n == &quot;Yes&quot;) </code></pre>
 <p>Build the interactive map in layers</p>
 <pre class="r"><code>leaflet() %&gt;% 
   addProviderTiles(&quot;Esri.WorldStreetMap&quot;, group = &quot;Street Map&quot;) %&gt;% 
   addProviderTiles(&quot;Esri.WorldImagery&quot;,group = &quot;World Imagery&quot;) %&gt;% 
-  addLayersControl(baseGroups = c(&quot;Street Map&quot;, &quot;World Imagery&quot;))</code></pre>
-<div id="htmlwidget-4dc8e9795739b27abf86" style="width:672px;height:480px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-4dc8e9795739b27abf86">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addProviderTiles","args":["Esri.WorldStreetMap",null,"Street Map",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addProviderTiles","args":["Esri.WorldImagery",null,"World Imagery",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addLayersControl","args":[["Street Map","World Imagery"],[],{"collapsed":true,"autoZIndex":true,"position":"topright"}]}]},"evals":[],"jsHooks":[]}</script>
+  addCircleMarkers(data = sy_r2, label = sy_r2$barrier_id, popup = ~paste0(sy_r2$barrier_id, &quot;&lt;br/&gt;&quot;, sy_r2$pad_id), color = &quot;red&quot;, group = &quot;Detailed Required&quot;, radius = 6, fillOpacity = .5) %&gt;% 
+  addCircleMarkers(data = sy_nr, label = sy_nr$barrier_id, popup = ~paste0(sy_nr$barrier_id, &quot;&lt;br/&gt;&quot;, sy_nr$pad_id), color = &quot;dodgerblue&quot;, group = &quot;Non-Road Barrier&quot;, radius = 3, fillOpacity = 1) %&gt;%
+  addCircleMarkers(data = sy_r, label = sy_r$barrier_id, popup = ~paste0(sy_r$barrier_id, &quot;&lt;br/&gt;&quot;, sy_r$pad_id), color = &quot;green&quot;, group = &quot;Road Barrier&quot;, radius = 3, fillOpacity = 1) %&gt;%
+  addLayersControl(baseGroups = c(&quot;Street Map&quot;, &quot;World Imagery&quot;), overlayGroups = c(&quot;Non-Road Barrier&quot;, &quot;Road Barrier&quot;, &quot;Detailed Required&quot;))</code></pre>
+<pre><code>## Assuming &quot;longitude&quot; and &quot;latitude&quot; are longitude and latitude, respectively
+## Assuming &quot;longitude&quot; and &quot;latitude&quot; are longitude and latitude, respectively
+## Assuming &quot;longitude&quot; and &quot;latitude&quot; are longitude and latitude, respectively</code></pre>
+<div id="htmlwidget-e06983322a97f2704fe7" style="width:672px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e06983322a97f2704fe7">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addProviderTiles","args":["Esri.WorldStreetMap",null,"Street Map",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addProviderTiles","args":["Esri.WorldImagery",null,"World Imagery",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addCircleMarkers","args":[[34.42031,34.42102,34.42117,34.43954],[-119.62394,-119.62373,-119.6237,-119.62051],6,null,"Detailed Required",{"interactive":true,"className":"","stroke":true,"color":"red","weight":5,"opacity":0.5,"fill":true,"fillColor":"red","fillOpacity":0.5},null,null,["SYD_002_R<br/>707370","SYD_003_R<br/>734342","SYD_004_R<br/>None","SYD_008_R<br/>762183"],null,["SYD_002_R","SYD_003_R","SYD_004_R","SYD_008_R"],{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addCircleMarkers","args":[[34.43823,34.43866,34.43879,34.43845,34.44355,34.44599,34.44924,34.45253,34.45533,34.45551],[-119.62001,-119.62014,-119.62024,-119.62007,-119.62202,-119.62244,-119.62268,-119.62183,-119.62348,-119.6234],3,null,"Non-Road Barrier",{"interactive":true,"className":"","stroke":true,"color":"dodgerblue","weight":5,"opacity":0.5,"fill":true,"fillColor":"dodgerblue","fillOpacity":1},null,null,["SYD_001_NR<br/>706504","SYD_002_NR<br/>706505","SYD_003_NR<br/>706506","SYD_004_NR<br/>706507","SYD_005_NR<br/>706508","SYD_006_NR<br/>None","SYD_007_NR<br/>706510","SYD_008_NR<br/>None","SYD_009_NR<br/>706511","SYD_010_NR<br/>None"],null,["SYD_001_NR","SYD_002_NR","SYD_003_NR","SYD_004_NR","SYD_005_NR","SYD_006_NR","SYD_007_NR","SYD_008_NR","SYD_009_NR","SYD_010_NR"],{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addCircleMarkers","args":[[34.41953,34.42031,34.42102,34.42117,34.42538,34.43737,34.43902,34.43954],[-119.62463,-119.62394,-119.62373,-119.6237,-119.62132,-119.61977,-119.62033,-119.62051],3,null,"Road Barrier",{"interactive":true,"className":"","stroke":true,"color":"green","weight":5,"opacity":0.5,"fill":true,"fillColor":"green","fillOpacity":1},null,null,["SYD_001_R<br/>706502","SYD_002_R<br/>707370","SYD_003_R<br/>734342","SYD_004_R<br/>None","SYD_005_R<br/>None","SYD_006_R<br/>None","SYD_007_R<br/>None","SYD_008_R<br/>762183"],null,["SYD_001_R","SYD_002_R","SYD_003_R","SYD_004_R","SYD_005_R","SYD_006_R","SYD_007_R","SYD_008_R"],{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addLayersControl","args":[["Street Map","World Imagery"],["Non-Road Barrier","Road Barrier","Detailed Required"],{"collapsed":true,"autoZIndex":true,"position":"topright"}]}],"limits":{"lat":[34.41953,34.45551],"lng":[-119.62463,-119.61977]}},"evals":[],"jsHooks":[]}</script>
 
 
 
