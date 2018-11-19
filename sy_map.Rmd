@@ -43,7 +43,7 @@ sy_r2 <- sy_data %>% filter(barrier_type_road_non_road == "R" & x2nd_pass_y_n ==
 
 Build the interactive map in layers 
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 leaflet() %>% 
   addProviderTiles("Esri.WorldStreetMap", group = "Street Map") %>% 
   addProviderTiles("Esri.WorldImagery",group = "World Imagery") %>% 
