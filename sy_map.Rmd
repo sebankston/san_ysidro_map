@@ -7,6 +7,7 @@ library(tidyverse)
 library(sf)
 library(leaflet)
 library(googlesheets)
+library(janitor)
 ```
 
 Get a list of the Google sheets you have access to.
@@ -26,12 +27,15 @@ sy_all <- gs_title("San_Ysidro_inventory")
 
 gs_ws_ls(sy_all)
 
-sy_data <- gs_read(ss = sy_all, ws = "Sheet1")
+sy_data <- gs_read(ss = sy_all, ws = "Sheet1") %>% clean_names()
+
+```
+Filter for each barrier type to be added to the map as individual layers
+
+```{r}
+sy_nr <- sy_data %>% filter(barrier_type_road_non_road == "NR")
+sy_r <- sy_data %>% filter(barrier_type_road_non_road ==)
 
 ```
 
-# get Westminster voting
-west <- gs_read(ss=be, ws = "Westminster voting intentions", skip=1)
 
-# convert to data.frame
-wdf <- as.data.frame(west)
