@@ -1,0 +1,37 @@
+---
+title: "san_ysidro_map"
+output: html_document
+---
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(sf)
+library(leaflet)
+library(googlesheets)
+```
+
+Get a list of the Google sheets you have access to.
+
+```{r}
+gs_ls()
+```
+
+Get the San Ysidro sheet and assign to sy_all.
+
+See what sheets the San Ysidro titled doc contains with gs_ws_ls()
+
+Download the sheet where the data is contained
+
+```{r}
+sy_all <- gs_title("San_Ysidro_inventory")
+
+gs_ws_ls(sy_all)
+
+sy_data <- gs_read(ss = sy_all, ws = "Sheet1")
+
+```
+
+# get Westminster voting
+west <- gs_read(ss=be, ws = "Westminster voting intentions", skip=1)
+
+# convert to data.frame
+wdf <- as.data.frame(west)
