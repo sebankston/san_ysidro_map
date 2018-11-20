@@ -1,8 +1,3 @@
----
-title: "san_ysidro_map"
-output: html_document
----
-```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(sf)
 library(leaflet)
@@ -10,40 +5,19 @@ library(leaflet.extras)
 library(googlesheets)
 library(janitor)
 library(htmlwidgets)
-```
 
-Get a list of the Google sheets you have access to.
-
-```{r}
 gs_ls()
-```
 
- - Get the San Ysidro sheet and assign to sy_all.
-
- - See what sheets the San Ysidro titled doc contains with gs_ws_ls()
-
- - Download the sheet where the data is contained
-
-```{r, message=FALSE, warning=FALSE}
 sy_all <- gs_title("San_Ysidro_inventory")
 
 gs_ws_ls(sy_all)
 
 sy_data <- gs_read(ss = sy_all, ws = "Sheet1") %>% clean_names()
 
-```
-Filter for each barrier type to be added to the map as individual layers
-
-```{r}
 sy_nr <- sy_data %>% filter(barrier_type_road_non_road == "NR") 
 sy_r <- sy_data %>% filter(barrier_type_road_non_road == "R") 
 sy_r2 <- sy_data %>% filter(barrier_type_road_non_road == "R" & x2nd_pass_y_n == "Yes") 
 
-```
-
-Build the interactive map in layers 
-
-```{r message=FALSE, warning=FALSE}
 leaflet() %>% 
   addProviderTiles("Esri.WorldStreetMap", group = "Street Map") %>% 
   addProviderTiles("Esri.WorldImagery",group = "World Imagery") %>% 
@@ -51,5 +25,3 @@ leaflet() %>%
   addCircleMarkers(data = sy_nr, label = sy_nr$barrier_id, popup = ~paste0(sy_nr$barrier_id, "<br/>", sy_nr$pad_id), color = "dodgerblue", group = "Non-Road Barrier", radius = 3, fillOpacity = 1) %>%
   addCircleMarkers(data = sy_r, label = sy_r$barrier_id, popup = ~paste0(sy_r$barrier_id, "<br/>", sy_r$pad_id), color = "green", group = "Road Barrier", radius = 3, fillOpacity = 1) %>%
   addLayersControl(baseGroups = c("Street Map", "World Imagery"), overlayGroups = c("Non-Road Barrier", "Road Barrier", "Detailed Required"))
-```
-
