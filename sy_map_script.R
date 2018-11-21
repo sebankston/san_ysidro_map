@@ -6,7 +6,7 @@ library(googlesheets)
 library(janitor)
 library(htmlwidgets)
 
-gs_ls()
+all_sheets <- as_tibble(gs_ls())
 
 sy_all <- gs_title("San_Ysidro_inventory")
 
